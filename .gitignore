@@ -1,2 +1,3 @@
 /.idea
 /api/vendor/
+/configs/db/mysql
