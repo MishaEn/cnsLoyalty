@@ -1,0 +1,23 @@
+{
+    "name": "misha/api",
+    "autoload": {
+        "psr-4": {
+            "Misha\\CnsLoyalty\\": ""
+        },
+        "files": [
+            "src/routes.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Bychkov Mikhail",
+            "email": "mishaenn@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "scripts": {
+        "test": "composer exec --verbose  phpunit src/tests"
+    }
+}

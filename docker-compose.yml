@@ -1,0 +1,65 @@
+version: '3.9'
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - '8080:80'
+    volumes:
+      - ./api:/var/www/html
+      - ./configs/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - mysql_db
+    depends_on:
+      - php-fpm
+      - mysql_db
+    networks:
+      - api
+  php-fpm:
+    build:
+      context: ./configs/php
+      dockerfile: Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./api:/var/www/html
+      - ./configs/php/php/ini:/usr/local/etc/php/php.ini
+    depends_on:
+        - mysql_db
+    links:
+      - mysql_db
+    networks:
+      - api
+  mysql_db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: test
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./configs/db/mysql:/var/lib/mysql/
+      - ./configs/db/script:/docker-entrypoint-initdb.d/
+    networks:
+      - api
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      restart: always
+      depends_on:
+        - mysql_db
+      links:
+        - mysql_db
+      ports:
+        - "8081:80"
+      environment:
+        PMA_HOST: mysql_db
+        PMA_PORT: 3306
+        PMA_ARBITRARY: 1
+      networks:
+        - api
+networks:
+  api:
+    driver: bridge
