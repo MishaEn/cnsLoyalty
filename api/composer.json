@@ -19,5 +19,8 @@
     },
     "scripts": {
         "test": "composer exec --verbose  phpunit src/tests"
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.8"
     }
 }

@@ -81,7 +81,9 @@ class Router
             $match = false;
 
             foreach ($routePath as $itemKey => $routeItem) {
-                $match = !str_starts_with($routeItem, ':') && $this->requestPath[$itemKey] === $routeItem;
+                if (!str_starts_with($routeItem, ':')) {
+                    $match = $this->requestPath[$itemKey] === $routeItem;
+                }
 
                 if (str_starts_with($routeItem, ':')) {
                     $params[substr($routeItem,1)] = $this->requestPath[$itemKey];
